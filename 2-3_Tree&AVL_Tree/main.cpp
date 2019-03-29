@@ -1,4 +1,4 @@
-// 10627130 林冠良 & 10627131 李峻瑋 // CodeBlocks 17.12
+// 10627130 ªL«a¨} & 10627131 §õ®mÞ³ // CodeBlocks 17.12
 #include <iostream>
 #include <sstream>
 #include <fstream>
@@ -24,12 +24,13 @@ typedef struct DataStruct {
     string whole = "\0" ;
 } DataStruct ;
 
-typedef struct VectorStuct {
+typedef struct VectorStruct {
     vector<vector<DataStruct> > nodeData ;
-    VectorStuct* parent = NULL ;
-    VectorStuct* leftChild = NULL ;
-    VectorStuct* rightChild = NULL ;
-} VectorStuct;
+    VectorStruct* parent = NULL ;
+    VectorStruct* leftChild = NULL ;
+    VectorStruct* middleChild = NULL ;
+    VectorStruct* rightChild = NULL ;
+} VectorStruct;
 
 static ifstream input ;
 static ofstream output ;
@@ -39,9 +40,9 @@ static int Command = 0 ;
 
 class TwoThreeTree {
 private:
-    VectorStuct* root = NULL ;
+    VectorStruct* root = NULL ;
 public:
-    int GetHeight( VectorStuct* root ) {
+    int GetHeight( VectorStruct* root ) {
         if ( root == NULL ) return 0 ;
         else {
             int leftDepth = GetHeight( root->leftChild ) ;
