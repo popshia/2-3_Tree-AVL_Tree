@@ -116,9 +116,6 @@ public:
 
     }
     
-    void FixBySchoolName() {
-        
-    }
 } ;
 
 class AVLTree : public TwoThreeTree {
@@ -136,9 +133,6 @@ public:
 
     }
     
-    void FixByDepartmentName() {
-        
-    }
 } ;
 
 int main() {
