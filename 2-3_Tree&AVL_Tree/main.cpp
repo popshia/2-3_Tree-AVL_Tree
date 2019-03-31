@@ -18,26 +18,31 @@ typedef struct DataStruct {
     int index = 0 ;
     string schoolName = "\0" ;
     string departmentName = "\0" ;
+    string dayOrNight = "\0" ;
+    string graduateType = "\0" ;
+    int student = 0 ;
     string whole = "\0" ;
 } DataStruct ;
 
-typedef struct VectorStuct {
-    vector<vector<DataStruct>> nodeData ;
-    VectorStuct* parent = NULL ;
-    VectorStuct* leftChild = NULL ;
-    VectorStuct* rightChild = NULL ;
-} VectorStuct;
+typedef struct PointerStruct {
+    vector<vector<DataStruct> > nodeData ;
+    PointerStruct* parent = NULL ;
+    PointerStruct* leftChild = NULL ;
+    PointerStruct* middleChild = NULL ;
+    PointerStruct* rightChild = NULL ;
+} PointerStruct;
 
 static ifstream input ;
 static ofstream output ;
 static string FileNumber = "0" ;
 static int Count = 1 ;
+static int Command = 0 ;
 
 class TwoThreeTree {
 private:
-    VectorStuct* root = NULL ;
+    PointerStruct* root = NULL ;
 public:
-    int GetHeight( VectorStuct* root ) {
+    int GetHeight( PointerStruct* root ) {
         if ( root == NULL ) return 0 ;
         else {
             int leftDepth = GetHeight( root->leftChild ) ;
@@ -65,23 +70,49 @@ public:
                 tokens.push_back( temp ) ;
             
             tempData.schoolName = tokens[1] ;
-            tempData.departmentName = tokens[4] ;
+            tempData.departmentName = tokens[3] ;
+            tempData.dayOrNight = tokens[4] ;
+            tempData.graduateType = tokens[5] ;
+            tempData.student = atoi( tokens[6].c_str() ) ;
             // InsertBySchoolName( tempdata ) ; // Insert & Analyze
             Count++ ;
         } // get the whole file
         
-        cout << "Tree Height: " << GetHeight( root ) << endl << endl ; // print the tree height
+        cout << "Tree Height = " << GetHeight( root ) << endl ; // print the tree height
+        int n = 1 ;
         for ( int first = 0 ; first < root->nodeData.size() ; first++ ) {
-            for ( int second = 0 ; second < root->nodeData[first].size() ; second++ )
-                cout << root->nodeData[first][second].whole << endl ;
-        } // print the root
+            for ( int second = 0 ; second < root->nodeData[first].size() ; second++ ) {
+                cout << n << ": [" << root->nodeData[first][second].index << "]" << ", " ;
+                cout << root->nodeData[first][second].schoolName << ", " ;
+                cout << root->nodeData[first][second].departmentName << ", " ;
+                cout << root->nodeData[first][second].dayOrNight << ", " ;
+                cout << root->nodeData[first][second].graduateType << ", " ;
+                cout << root->nodeData[first][second].student << ", " << endl ;
+                n++ ;
+            } // the second layer
+        } // print the first layer
+        cout << endl ;
     } // Analyze the whole input file
     
     void InsertBySchoolName( DataStruct data ) {
-        
+        PointerStruct* walk = root ;
+        if ( walk == NULL ) {
+            walk = new PointerStruct ;
+            walk->nodeData[0].push_back( data ) ;
+            root = walk ;
+        } // first data
+        else {
+            while ( walk != NULL ) {
+                
+            }
+        }
     }
     
     void AnalyzeBySchoolName() {
+        
+    }
+    
+    void FixBySchoolName() {
         
     }
 } ;
@@ -96,37 +127,40 @@ public:
     void AnalyzeByDepartmentName() {
         
     }
+    
+    void FixByDepartmentName() {
+        
+    }
 } ;
 
 int main() {
-    int command = 0 ;
     bool continueOrNot = false ;
     TwoThreeTree twoThreeTree ;
     AVLTree avlTree ;
     
     do {
-        cout << "********************************************************" << endl ; // welcome message
-        cout << "*****              2-3 Tree & AVL Tree             *****" << endl ;
-        cout << "***** 0 : Quit                                     *****" << endl ;
-        cout << "***** 1 : 2-3 Tree                                 *****" << endl ;
-        cout << "***** 2 : AVL Tree                                 *****" << endl ;
-        cout << "********************************************************" << endl ;
+        cout << "**********************************************" << endl ; // welcome message
+        cout << "*****         2-3 Tree & AVL Tree        *****" << endl ;
+        cout << "***** 0 : Quit                           *****" << endl ;
+        cout << "***** 1 : Build 2-3 Tree                 *****" << endl ;
+        cout << "***** 2 : Build AVL Tree                 *****" << endl ;
+        cout << "**********************************************" << endl ;
         cout << endl << "Please enter your choice:" << endl ;
         
-        cin >> command ; // read in user command
+        cin >> Command ; // read in user command
         cout << endl ;
         
-        if ( command == 0 ) { // bye :(((
+        if ( Command == 0 ) { // bye :(((
             cout << "Bye :(((" << endl ;
             return 0 ;
         } // quit
         
-        else if ( command > 2 || command < 0 ) {
+        else if ( Command > 2 || Command < 0 ) {
             cout << "Error command! please enter an acceptable command:" << endl << endl ;
             continueOrNot = true ;
         } // wrong command
         
-        else if ( command == 1 ) { // read, count and build
+        else if ( Command == 1 ) { // read, count and build
             bool function1Confirm = false ;
             
             do {
@@ -156,7 +190,7 @@ int main() {
             output.close() ;
         } // 2-3 tree
         
-        else if ( command == 2 ) {
+        else if ( Command == 2 ) {
             bool function2Confirm = false ;
             
             do {
