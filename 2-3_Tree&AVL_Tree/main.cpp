@@ -193,12 +193,13 @@ public:
         } // not first data
     } // InsertBySchoolName( )
 
-    PointerStruct* FixBySchoolName( PointerStruct* currentParent, PointerStruct* currentIssue ) {
+    void FixBySchoolName( PointerStruct* currentParent, PointerStruct* currentIssue ) {
         PointerStruct* newNode ;
-        vector<DataStruct> tempNewVector ;
 
-        while ( currentParent->parent != NULL ) {
-
+        do {
+            if ( currentParent == root ) {
+                newNode->nodeData.push_back( currentIssue->nodeData[1] ) ;
+            }
             if ( currentParent->nodeData.size() < 2 ) {
                 if ( currentIssue->nodeData[1][0].schoolName < currentParent->nodeData[0][0].schoolName )
                     currentParent->nodeData.insert( currentParent->nodeData.begin(), currentIssue->nodeData[1] ) ;
@@ -207,7 +208,8 @@ public:
                 currentIssue->nodeData.erase( currentIssue->nodeData.begin()+1 ) ;
             } // parent is not full
 
-        } //
+            currentParent = currentParent->parent ;
+        } while ( currentParent->nodeData.size() == 3 ) ;
 
     }
 } ;
