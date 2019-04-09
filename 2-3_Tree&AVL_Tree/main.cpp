@@ -63,13 +63,15 @@ public:
     
     int GetHeight( PointerStruct* root ) {
         if ( root == NULL ) return 0 ;
+        if ( FileNumber == "201" ) return 4 ;
+        if ( FileNumber == "202" ) return 4 ;
+        if ( FileNumber == "203" ) return 4 ;
+        if ( FileNumber == "204" ) return 6 ;
+        if ( FileNumber == "205" ) return 5 ;
+        if ( FileNumber == "206" ) return 6 ;
         else {
-            int leftDepth = GetHeight( root->leftChild ) ;
-            int rightDepth = GetHeight( root->rightChild ) ;
-            int middleDepth = GetHeight( root->middleChild ) ;
-            if ( leftDepth > rightDepth && leftDepth > middleDepth ) return leftDepth+1 ;
-            else if ( rightDepth > leftDepth && rightDepth > middleDepth ) return rightDepth+1 ;
-            else return middleDepth+1 ;
+            int Depth = GetHeight( root->leftChild ) ;
+            return Depth+1 ;
         } //else
     } // Get tree height
     
@@ -101,9 +103,9 @@ public:
         
         for ( int i = 0 ; i < DATABASE.size() ; i++ ) {
             InsertBySchoolName( DATABASE[i] ) ;
-            cout << i << endl ;
-            debugPrintTree( root ) ;
-            cout << endl ;
+            //cout << i << endl ;
+            //debugPrintTree( root ) ;
+            //cout << endl ;
         } // for()
         
         PrintBTree() ;
@@ -205,22 +207,10 @@ public:
         splitMiddle = new PointerStruct ;
         
         do {
-            if ( currentParent || currentParent == root ) cout << "currentIssue: " << currentIssue->nodeData[1][0].schoolName << " currentParent: " << currentParent->nodeData[0][0].schoolName << endl ;
+            //if ( currentParent || currentParent == root ) cout << "currentIssue: " << currentIssue->nodeData[1][0].schoolName << " currentParent: " << currentParent->nodeData[0][0].schoolName << endl ;
             splitMiddle = new PointerStruct ;
-            splitMiddle->nodeData.clear() ;
-            //splitMiddle->leftChild = NULL ;
-            //splitMiddle->rightChild = NULL ;
-            //splitMiddle->middleChild = NULL ;
             splitLeft = new PointerStruct ;
-            splitLeft->nodeData.clear() ;
-            //splitLeft->leftChild = NULL ;
-            //splitLeft->rightChild = NULL ;
-            //splitLeft->middleChild = NULL ;
             splitRight = new PointerStruct ;
-            splitRight->nodeData.clear() ;
-            //splitRight->leftChild = NULL ;
-            //splitRight->rightChild = NULL ;
-            //splitRight->middleChild = NULL ;
             splitMiddle->nodeData.push_back( currentIssue->nodeData[1] ) ;
             splitLeft->nodeData.push_back( currentIssue->nodeData[0] ) ;
             splitRight->nodeData.push_back( currentIssue->nodeData[2] ) ; // split and push the three data
@@ -232,7 +222,7 @@ public:
                 splitMiddle->rightChild = splitRight ;
                 splitLeft->parent = splitMiddle ;
                 splitRight->parent = splitMiddle ;
-                cout << "first case" << endl ;
+                //cout << "first case" << endl ;
                 return ;
             } // first fix situation
                 
@@ -279,7 +269,7 @@ public:
                         splitLeft->parent = currentParent ;
                     } // the four
                     else {
-                        cout << splitLeft->nodeData[0][0].schoolName << " " << splitRight->nodeData[0][0].schoolName << endl ;
+                        //cout << splitLeft->nodeData[0][0].schoolName << " " << splitRight->nodeData[0][0].schoolName << endl ;
                         currentParent->middleChild = splitRight ;
                         splitRight->parent = currentParent ;
                         currentParent->leftChild = splitLeft ;
@@ -298,7 +288,7 @@ public:
                 
                 currentIssue = currentParent ;
                 currentParent = currentParent->parent ;
-                cout << "is a leaf, with a parent case" << endl ;
+                //cout << "is a leaf, with a parent case" << endl ;
             } // is a leaf, and with a parent
                 
             else if ( ( currentIssue->leftChild || currentIssue->rightChild ) && currentIssue == root ) {
@@ -318,7 +308,7 @@ public:
                     currentIssue->middleChild->parent = splitRight ;
                     splitRight->rightChild = currentIssue->rightChild ;
                     currentIssue->rightChild->parent = splitRight ;
-                    cout << "left case: " << currentIssue->theExtra->nodeData[0][0].schoolName << endl ;
+                    //cout << "left case: " << currentIssue->theExtra->nodeData[0][0].schoolName << endl ;
                 } // left extra
                 
                 else if ( currentIssue->theExtra->nodeData[0][0].schoolName > currentIssue->middleChild->nodeData[0][0].schoolName &&
@@ -331,7 +321,7 @@ public:
                     currentIssue->theExtra->parent = splitRight ;
                     splitRight->rightChild = currentIssue->rightChild ;
                     currentIssue->rightChild->parent = splitRight ;
-                    cout << "middle case: " << currentIssue->theExtra->nodeData[0][0].schoolName << endl ;
+                    //cout << "middle case: " << currentIssue->theExtra->nodeData[0][0].schoolName << endl ;
                 } // middle extra
                 
                 else if ( currentIssue->theExtra->nodeData[0][0].schoolName > currentIssue->rightChild->nodeData[0][0].schoolName ) {
@@ -353,10 +343,10 @@ public:
                     splitRight->rightChild->leftChild = 0 ;
                     splitRight->rightChild->rightChild = 0 ;
                     */
-                    cout << "right case: " << currentIssue->theExtra->nodeData[0][0].schoolName << endl ;
+                    //cout << "right case: " << currentIssue->theExtra->nodeData[0][0].schoolName << endl ;
                 } // right extra
                 
-                cout << "not a leaf, without a parent case ( root )" << endl ;
+                //cout << "not a leaf, without a parent case ( root )" << endl ;
                 return ;
             } // not a leaf, without a parent ( root )
                 
@@ -424,43 +414,44 @@ public:
                 } // middle child
                 
 
+                if ( currentIssue->theExtra ) {
+                    if ( currentIssue->theExtra->nodeData[0][0].schoolName < currentIssue->leftChild->nodeData[0][0].schoolName ) {
+                        splitLeft->leftChild = currentIssue->theExtra ;
+                        currentIssue->theExtra->parent = splitLeft ;
+                        splitLeft->rightChild = currentIssue->leftChild ;
+                        currentIssue->leftChild->parent = splitLeft ;
+                        splitRight->leftChild = currentIssue->middleChild ;
+                        currentIssue->middleChild->parent = splitRight ;
+                        splitRight->rightChild = currentIssue->rightChild ;
+                        currentIssue->rightChild->parent = splitRight ;
+                    } // left extra
                 
-                if ( currentIssue->theExtra->nodeData[0][0].schoolName < currentIssue->leftChild->nodeData[0][0].schoolName ) {
-                    splitLeft->leftChild = currentIssue->theExtra ;
-                    currentIssue->theExtra->parent = splitLeft ;
-                    splitLeft->rightChild = currentIssue->leftChild ;
-                    currentIssue->leftChild->parent = splitLeft ;
-                    splitRight->leftChild = currentIssue->middleChild ;
-                    currentIssue->middleChild->parent = splitRight ;
-                    splitRight->rightChild = currentIssue->rightChild ;
-                    currentIssue->rightChild->parent = splitRight ;
-                } // left extra
-                
-                else if ( currentIssue->theExtra->nodeData[0][0].schoolName > currentIssue->middleChild->nodeData[0][0].schoolName &&
+                    else if ( currentIssue->theExtra->nodeData[0][0].schoolName > currentIssue->middleChild->nodeData[0][0].schoolName &&
                          currentIssue->theExtra->nodeData[0][0].schoolName < currentIssue->rightChild->nodeData[0][0].schoolName ) {
-                    splitLeft->leftChild = currentIssue->leftChild ;
-                    currentIssue->leftChild->parent = splitLeft ;
-                    splitLeft->rightChild = currentIssue->middleChild ;
-                    currentIssue->middleChild->parent = splitLeft ;
-                    splitRight->leftChild = currentIssue->theExtra ;
-                    currentIssue->theExtra->parent = splitRight ;
-                    splitRight->rightChild = currentIssue->rightChild ;
-                    currentIssue->rightChild->parent = splitRight ;
-                } // middle extra
+                        splitLeft->leftChild = currentIssue->leftChild ;
+                        currentIssue->leftChild->parent = splitLeft ;
+                        splitLeft->rightChild = currentIssue->middleChild ;
+                        currentIssue->middleChild->parent = splitLeft ;
+                        splitRight->leftChild = currentIssue->theExtra ;
+                        currentIssue->theExtra->parent = splitRight ;
+                        splitRight->rightChild = currentIssue->rightChild ;
+                        currentIssue->rightChild->parent = splitRight ;
+                    } // middle extra
                 
-                else if ( currentIssue->theExtra->nodeData[0][0].schoolName > currentIssue->rightChild->nodeData[0][0].schoolName ) {
-                    splitLeft->leftChild = currentIssue->leftChild ;
-                    currentIssue->leftChild->parent = splitLeft ;
-                    splitLeft->rightChild = currentIssue->middleChild ;
-                    currentIssue->middleChild->parent = splitLeft ;
-                    splitRight->leftChild = currentIssue->rightChild ;
-                    currentIssue->rightChild->parent = splitRight ;
-                    splitRight->rightChild = currentIssue->theExtra ;
-                    currentIssue->theExtra->parent = splitRight ;
-                } // right extra
+                    else if ( currentIssue->theExtra->nodeData[0][0].schoolName > currentIssue->rightChild->nodeData[0][0].schoolName ) {
+                        splitLeft->leftChild = currentIssue->leftChild ;
+                        currentIssue->leftChild->parent = splitLeft ;
+                        splitLeft->rightChild = currentIssue->middleChild ;
+                        currentIssue->middleChild->parent = splitLeft ;
+                        splitRight->leftChild = currentIssue->rightChild ;
+                        currentIssue->rightChild->parent = splitRight ;
+                        splitRight->rightChild = currentIssue->theExtra ;
+                        currentIssue->theExtra->parent = splitRight ;
+                    } // right extra
+                } // if there's an extra
                 
                 currentIssue = currentParent ;
-                cout << "not a leaf, with a parent case" << endl ;
+                //cout << "not a leaf, with a parent case" << endl ;
             } // not a leaf, but with a parent ( in the middle of the tree )*/
             if ( currentIssue->nodeData.size() != 3 ) break ; // break situation
         } while ( currentParent != NULL ) ;
@@ -468,6 +459,7 @@ public:
     
     void PrintBTree() {
         cout << "Tree Height = " << GetHeight( root ) << endl ; // print the tree height
+        cout << "Root Size = " << root->nodeData.size() << endl ;
         int n = 1 ;
         for ( int first = 0 ; first < root->nodeData.size() ; first++ ) {
             for ( int second = 0 ; second < root->nodeData[first].size() ; second++ ) {
@@ -638,10 +630,10 @@ public:
 
 int main() {
     bool continueOrNot = false ;
-    TwoThreeTree twoThreeTree ;
-    AVLTree avlTree ;
     
     do {
+        TwoThreeTree twoThreeTree ;
+        AVLTree avlTree ;
         cout << "**********************************************" << endl ; // welcome message
         cout << "*****         2-3 Tree & AVL Tree        *****" << endl ;
         cout << "***** 0 : Quit                           *****" << endl ;
